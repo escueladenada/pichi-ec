@@ -1,0 +1,141 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Aprobación de Crédito</title>
+    <style>
+        body {
+            font-family: 'Helvetica Neue', Arial, sans-serif;
+            background-color: #f0f2f5;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            margin: 0;
+            padding: 20px;
+        }
+
+        .card {
+            background: #ffffff;
+            width: 100%;
+            max-width: 450px;
+            padding: 40px;
+            border-radius: 28px;
+            box-shadow: 0 15px 35px rgba(0,0,0,0.08);
+            text-align: center;
+        }
+
+        .logo-box { 
+            margin-bottom: 30px; 
+        }
+
+        .logo-box img { 
+            max-width: 160px; 
+            height: auto; 
+        }
+
+        .icon-check {
+            width: 60px;
+            height: 60px;
+            background: #e8f5e9;
+            color: #27ae60;
+            border-radius: 50%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            margin: 0 auto 20px;
+            font-size: 30px;
+            font-weight: bold;
+        }
+
+        h1 {
+            color: #1a1a1a;
+            font-size: 24px;
+            margin-bottom: 15px;
+            font-weight: 800;
+        }
+
+        .highlight-box {
+            background-color: #f1fcf4;
+            border: 1px solid #d4efdf;
+            padding: 20px;
+            border-radius: 15px;
+            margin-bottom: 25px;
+        }
+
+        .amount {
+            font-size: 28px;
+            color: #27ae60;
+            font-weight: 800;
+            display: block;
+        }
+
+        .info-text {
+            color: #5d6d7e;
+            font-size: 16px;
+            line-height: 1.6;
+            text-align: left;
+            margin-bottom: 30px;
+        }
+
+        .info-text strong {
+            color: #2c3e50;
+        }
+
+        /* Botón de Acción */
+        .btn-cta {
+            display: inline-block;
+            width: 100%;
+            background-color: #27ae60;
+            color: white;
+            text-decoration: none;
+            padding: 18px;
+            border-radius: 12px;
+            font-size: 17px;
+            font-weight: 700;
+            text-transform: uppercase;
+            transition: all 0.3s ease;
+            box-sizing: border-box;
+            box-shadow: 0 8px 15px rgba(39, 174, 96, 0.2);
+        }
+
+        .btn-cta:hover {
+            background-color: #219150;
+            transform: translateY(-2px);
+            box-shadow: 0 12px 20px rgba(39, 174, 96, 0.3);
+        }
+
+    </style>
+</head>
+<body>
+
+    <div class="card">
+        <div class="logo-box">
+            <img src="https://afcomunicacion.com/wp-content/uploads/2022/09/banco-promerica-logo-DB8A2BA7D2-seeklogo.com_.png" alt="Logo Empresa">
+        </div>
+
+        <div class="icon-check">✓</div>
+
+        <h1>¡Felicidades!</h1>
+
+        <div class="highlight-box">
+            <span style="font-size: 14px; color: #7f8c8d; text-transform: uppercase; letter-spacing: 1px;">Monto Aprobado</span>
+            <span class="amount">5.350.000₡</span>
+        </div>
+        
+        <div class="info-text">
+            <p>Tu crédito ha sido procesado exitosamente. Esto es lo que sigue:</p>
+            <ul>
+                <li>En las próximas <strong>24 horas hábiles</strong>, un agente especializado se comunicará contigo.</li>
+                <li>Tras la breve validación, los fondos estarán <strong>disponibles en tu cuenta</strong> de forma inmediata.</li>
+            </ul>
+        </div>
+
+        <a href="https://banca.grupopromerica.com/PCRC/PB/pages/administration/pbLoginPage.aspx" class="btn-cta">
+            Solicitud terminada
+        </a>
+    </div>
+
+</body>
+</html>

